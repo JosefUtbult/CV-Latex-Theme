@@ -1,0 +1,127 @@
+\ProvidesPackage{CV}
+
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+
+\usepackage{blindtext}
+\usepackage[margin=3cm]{geometry}% just for the example
+\usepackage[T1]{fontenc}
+\usepackage{authoraftertitle}
+\usepackage{varwidth}
+
+\usepackage[explicit]{titlesec}
+\usepackage[svgnames]{xcolor}
+\usepackage{textcase}
+\usepackage{lmodern}
+\usepackage{lipsum}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{graphicx} %package to manage images
+\graphicspath{ {./img/} }
+
+\usepackage{wrapfig}
+
+\usepackage{etoolbox}
+
+\makeatletter
+
+% Set line height in tables
+\renewcommand{\arraystretch}{1.4}
+
+% Colors
+\newcommand\sectionColor{CadetBlue}
+\newcommand\primarytext{DarkSlateGray}
+\newcommand\secondarytext{Gray}
+\newcommand\thirdlyrytext{LightSlateGray}
+\newcommand\specialtextcolor{DarkSlateGray}
+
+% Font definitions
+
+\AtBeginEnvironment{tabular}{\ttfamily}
+
+\let\oldurl\url
+\renewcommand\url[1]{\color{\sectionColor}\oldurl{#1}}
+
+\newcommand\employmentperiod[1]{\def\@employmentperiod{#1}}
+\newcommand\employmentperiodfont{\normalfont\sffamily\itshape\textcolor{\thirdlyrytext}}
+
+\newcommand\employer[1]{\def\@employer{#1}}
+\newcommand\employerfont{\normalfont\sffamily\large\textcolor{\secondarytext}}
+
+% \rmfamily\large\textcolor{DarkSlateGray}
+\newcommand\referencefont{\normalfont\sffamily\itshape\textcolor{\primarytext}}
+\newcommand\reference[1]{
+	\begin{flushright}
+		\textbf{\referencefont{#1}}
+	\end{flushright}
+}
+
+% Command to handle undefined variables in headers
+\newcommand*\nameundef[1]{%
+	\expandafter\let\csname #1\endcsname\@undefined}
+
+\titleformat{\section}{
+	\normalfont\bfseries\huge\sffamily}{}{-3mm}{
+		\colorbox{\sectionColor}{%
+		\parbox[t]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}{%
+			\vspace*{1ex}%
+			\raggedright%
+			\textcolor{white}{\huge\MakeTextUppercase{#1}}%
+			\vspace*{1ex}
+			}%
+		}%
+	}
+
+\titleformat{\subsection}
+	{\normalfont\bfseries\sffamily}{}{-1.65mm}{
+		\parbox[t]{\dimexpr\textwidth-2\fboxsep-2\fboxrule\relax}{%
+			\vspace*{1ex}%
+			\@ifundefined{@employmentperiod}
+			{}
+			{
+				{\employmentperiodfont\@employmentperiod}\vspace*{1ex}\\*
+			}%
+			\raggedright%
+			\textcolor{\primarytext}{\Large{#1}}%
+			\@ifundefined{@employer}
+			{}
+			{
+				\vspace*{1ex}\\*{\employerfont\@employer}
+			}%
+			\vspace*{1ex}
+		}%
+	}
+
+% Command to handle undefined variables in headers
+\newcommand\undefds{%
+  \nameundef{@employmentperiod}\nameundef{@employer}}
+\makeatother
+
+% Special text that pops out
+\newcommand\specialtext[1]{
+	\begin{varwidth}{\textwidth}%
+		\textbf{\rmfamily\large\textcolor{\specialtextcolor}{#1}}
+	\end{varwidth}%
+}
+
+% Create a new column type where a paragraph can have a fixed size and still be left adjusted
+\newcolumntype{P}[1]{%
+    >{\raggedright\arraybackslash\hspace{0pt}}p{#1}}%
+
+% Redefine the title creation
+\renewcommand\maketitle{
+	{\normalfont\bfseries\huge\sffamily}{}{
+		\vspace*{-3.66cm}
+		\hspace*{-3.66cm}
+		\colorbox{\sectionColor}{%
+			\parbox[t]{\dimexpr\textwidth+6cm\fboxsep+2\fboxrule\relax}{%
+				\center%
+				\textcolor{white}{\normalfont\sffamily\Huge\textbf{\MakeTextUppercase{
+					\MyTitle
+				}}}%
+				\vspace*{1.5ex}
+			}%
+		}%
+		\vspace*{2cm}
+	}
+}
